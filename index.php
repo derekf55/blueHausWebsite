@@ -46,7 +46,7 @@
 
 <?php
         require "php/connect.php";
-	        $sql = 'SELECT Name,State,Appliance FROM homeAutomation;';
+        $sql = "SELECT Name,State,Appliance FROM homeAutomation WHERE groupName = 'Living_Room';";
 	        $results = mysqli_query($conn,$sql);
 		        while ($row = mysqli_fetch_assoc($results)){
 				            $name = $row['Name'];
