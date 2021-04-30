@@ -24,6 +24,8 @@ if (isset($_GET['command'])){
         $command = substr($command,0,-1);
     }
 
+    
+
     do {
 
         // If the command is meant for the pi
@@ -64,6 +66,50 @@ if (isset($_GET['command'])){
         $x--;
     } while ($x > 0);
 
+} else if (isset($_GET['specialVol'])){
+        // First go down to 0, guess that the volume is not higher than 50
+        $newVol = $_GET['specialVol'];
+        if ($newVol == ""){
+            header('Location: ' . $_SERVER['HTTP_REFERER']);
+            exit();
+        }
+        for ($i = 0; $i < 50; $i++){
+            $sql = 'INSERT INTO ProcessToRun (Command,Server) VALUES(?,"Pi");';
+            $stmt = mysqli_stmt_init($conn);
+            $command = "VolumeDown";
+            
+            // If the statement fails to execute  
+            if (!mysqli_stmt_prepare($stmt,$sql)){
+                echo "Failed to execute SQL";
+                exit();
+            // If the statement executes sucessfully 
+            }else{
+                mysqli_stmt_bind_param($stmt,"s",$command);
+                mysqli_stmt_execute($stmt);
+                //header('Location: ' . $_SERVER['HTTP_REFERER']);
+            }
+        }
+
+
+        for ($i = 0; $i < newVol; $i++){
+            $sql = 'INSERT INTO ProcessToRun (Command,Server) VALUES(?,"Pi");';
+            $stmt = mysqli_stmt_init($conn);
+            $command = "VolumeUp";
+
+            // If the statement fails to execute  
+            if (!mysqli_stmt_prepare($stmt,$sql)){
+                echo "Failed to execute SQL";
+                exit();
+            // If the statement executes sucessfully 
+            }else{
+                mysqli_stmt_bind_param($stmt,"s",$command);
+                mysqli_stmt_execute($stmt);
+                
+            }
+        }
+        
+        header('Location: ' . $_SERVER['HTTP_REFERER']);
+    
 }
 
 ?>
